@@ -17,10 +17,15 @@ def on_connect(mosq, obj, rc):
 
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
-    print(msg.topic + ' ' + str(msg.payload))
-    sensor_data = _parse_mqtt_message(msg.topic, msg.payload.decode('utf-8'))
-    if sensor_data is not None:
-        _send_sensor_data_to_influxdb(sensor_data) #Save Data into DB Table
+    # print(msg.topic + ' ' + str(msg.payload))
+    # sensor_data = _parse_mqtt_message(msg.topic, msg.payload.decode('utf-8'))
+    _send_sensor_data_to_influxdb(msg.topic, msg.payload)
+    # print(sensor_data + ' is null')
+    # if sensor_data is not None:
+    #     print('nouhaaaa')
+    #     _send_sensor_data_to_influxdb(sensor_data) #Save Data into DB Table
+    # else:
+    #     print('nouha nouha')
 
 def on_subscribe(mosq, obj, mid, granted_qos):
     pass

@@ -27,54 +27,60 @@ class SensorData(NamedTuple):
     measurement: str
     value: float
 
-def _send_sensor_data_to_influxdb(sensor_data):
+# def _send_sensor_data_to_influxdb(sensor_data):
+def _send_sensor_data_to_influxdb(topic, payload):
     humidity_body = [
-            {
-                "measurement": "humidity",
-                "tags": {
-                    "host": "server01"
-                },
-                "fields": {
-                    "name": "Humidity-Sensor1",
-                    "value": sensor_data.value,
-                }
+        {
+            "measurement": "humidity",
+            "tags": {
+                "host": "server01"
+            },
+            "fields": {
+                "name": "Humidity-Sensor1",
+                "value": payload,
             }
-        ]
+        }
+    ]
     temperature_body = [
-            {
-                "measurement": "temperature",
-                "tags": {
-                    "host": "server01"
-                },
-                "fields": {
-                    "name": "temperature-Sensor1",
-                    "value": sensor_data.value,
-                }
+        {
+            "measurement": "temperature",
+            "tags": {
+                "host": "server01"
+            },
+            "fields": {
+                "name": "temperature-Sensor1",
+                "value": payload,
             }
-        ]
-    influxdb_client.write_points(humidity_body)
-    influxdb_client.write_points(temperature_body)
-    result = influxdb_client.query('select last(value) as "humidity" from humidity;')
-    print("Humidity : {0}".format(result))
-    result = influxdb_client.query('select last(value) as "temperature" from temperature;')
-    print("Temperature : {0}".format(result))
-
-
+        }
+    ]
+    print(topic)
+    # condition on topic to  write measurement
+    if ("humidity" in topic):
+        influxdb_client.write_points(humidity_body)
+        result = influxdb_client.query('select last(value) as "humidity" from humidity;')
+        print("Humidity : {0}".format(result))
+    elif ("temperature" in topic):
+        influxdb_client.write_points(temperature_body)
+        result = influxdb_client.query('select last(value) as "temperature" from temperature;')
+        print("Temperature : {0}".format(result))
 
 def _parse_mqtt_message(topic, payload):
+    print('machakil')
     match = re.match(MQTT_REGEX, topic)
     if match:
-        measurement = match.Temperature_Value
+        print('case 1')
+        measurement = match.temperature
         if measurement == 'status':
+            print('what is this')
             return None
+        print('what is this')
         return SensorData(measurement, float(payload))
     elif match:
+        print('case 2')
         measurement = match.Humidity_Value
         if measurement == 'status':
             return None
         return SensorData(measurement, float(payload))
-
     else:
+        print('case 3')
         return None
-
-

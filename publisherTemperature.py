@@ -26,7 +26,7 @@ def on_disconnect(client, userdata, rc):
 
 def publish_To_Topic(topic, message):
     mqttc.publish(topic,message)
-    print ("Published: " + str(message) + " " + "on MQTT Topic: " + str(topic))
+    # print ("Published: " + str(message) + " " + "on MQTT Topic: " + str(topic))
 #==============================================================================
 #FAKE SENSOR 
 #Dummy code used as simulated sensor to publish some random values to MQTT Broker 
@@ -46,7 +46,7 @@ def publish_Sensor_Values_to_MQTT():
         Temperature_Data['Sensor_ID'] = "Temperature-Sensor1"
         Temperature_Data['Temperature'] = Temperature_Value
         temperature_json_data = json.dumps(Temperature_Data)
-        print ("Publishing Temperature Value: " + str(Temperature_Value) + "...")
+        # print ("Publishing Temperature Value: " + str(Temperature_Value) + "...")
         publish_To_Topic (MQTT_Topic_Temperature, temperature_json_data)
         toggle = 1
     else:

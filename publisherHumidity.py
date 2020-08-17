@@ -24,7 +24,7 @@ def on_disconnect(client, userdata, rc):
 
 def publish_To_Topic(topic, message):
     mqttc.publish(topic,message)
-    print ("Published: " + str(message) + " " + "on MQTT Topic: " + str(topic)+ "")
+    # print ("Published: " + str(message) + " " + "on MQTT Topic: " + str(topic)+ "")
 
 # Code used as simulated Sensor to publish some random values to MQTT Broker
 
@@ -42,7 +42,7 @@ def publish_Sensor_Values_to_MQTT():
         Humidity_Data['Sensor_ID'] = "Humidity-Sensor1"
         Humidity_Data['Humidity'] = Humidity_Value
         humidity_json_data = json.dumps(Humidity_Data)
-        print ("Publishing Humidity Value: " + str(Humidity_Value) + "...")
+        # print ("Publishing Humidity Value: " + str(Humidity_Value) + "...")
         publish_To_Topic (MQTT_Topic_Humidity, humidity_json_data)
         toggle = 1
     else:
